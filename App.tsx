@@ -34,7 +34,7 @@ function Section({children, title}: SectionProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
-      <Icon width={20} height={150} />
+      <Icon width={30} height={30} />
       <Text
         style={[
           styles.sectionTitle,
