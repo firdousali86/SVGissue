@@ -11,7 +11,7 @@ const CREATE_AUTHOR = gql`
   }
 `;
 
-const CreateAuthorForm = () => {
+const CreateAuthorForm = props => {
   const [value, setValue] = useState('');
   const [createAuthor, {loading, error}] = useMutation(CREATE_AUTHOR);
 
@@ -26,6 +26,13 @@ const CreateAuthorForm = () => {
               variables: {name: value},
             });
             console.log('New user created:', data);
+
+            setValue('');
+
+            if (props.onChange) {
+              props.onChange();
+            }
+
             // Optionally, you can perform some action after successful creation
           } catch (error) {
             console.error('Error creating user:', error);

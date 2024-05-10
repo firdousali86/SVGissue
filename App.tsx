@@ -48,7 +48,7 @@ const GET_USERS = gql`
 `;
 
 const UsersList = () => {
-  const {loading, error, data} = useQuery(GET_USERS);
+  const {loading, error, data, refetch} = useQuery(GET_USERS);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
@@ -58,6 +58,11 @@ const UsersList = () => {
       {data.authors.map(user => (
         <Text key={user.id}>{user.name}</Text>
       ))}
+      <CreateAuthor
+        onChange={() => {
+          refetch();
+        }}
+      />
     </View>
   );
 };
@@ -68,7 +73,6 @@ function App(): React.JSX.Element {
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <ApolloProvider client={client}>
           <UsersList />
-          <CreateAuthor />
         </ApolloProvider>
       </ScrollView>
     </SafeAreaView>
