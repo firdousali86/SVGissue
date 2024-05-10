@@ -27,6 +27,7 @@ import {
 import Icon from './src/assets/Icon';
 import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 import {useQuery, gql} from '@apollo/client';
+import CreateAuthor from './CreateAuthor';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000/',
@@ -46,10 +47,6 @@ const GET_USERS = gql`
   }
 `;
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
 const UsersList = () => {
   const {loading, error, data} = useQuery(GET_USERS);
 
@@ -66,31 +63,13 @@ const UsersList = () => {
 };
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <LearnMoreLinks />
-        </View>
+    <SafeAreaView style={{flex: 1}}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
         <ApolloProvider client={client}>
           <UsersList />
         </ApolloProvider>
+        <CreateAuthor />
       </ScrollView>
     </SafeAreaView>
   );
