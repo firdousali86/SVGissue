@@ -68,8 +68,8 @@ function App(): React.JSX.Element {
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <ApolloProvider client={client}>
           <UsersList />
+          <CreateAuthor />
         </ApolloProvider>
-        <CreateAuthor />
       </ScrollView>
     </SafeAreaView>
   );
