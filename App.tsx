@@ -25,37 +25,45 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import Icon from './src/assets/Icon';
+import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
+import {useQuery, gql} from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/',
+  cache: new InMemoryCache(),
+});
+
+if (__DEV__) {
+  require('./ReactotronConfig');
+}
+
+const GET_USERS = gql`
+  query {
+    authors {
+      id
+      name
+    }
+  }
+`;
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const UsersList = () => {
+  const {loading, error, data} = useQuery(GET_USERS);
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error: {error.message}</Text>;
+
   return (
-    <View style={styles.sectionContainer}>
-      <Icon width={30} height={30} />
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View>
+      {data.authors.map(user => (
+        <Text key={user.id}>{user.name}</Text>
+      ))}
     </View>
   );
-}
+};
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -78,21 +86,11 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
           <LearnMoreLinks />
         </View>
+        <ApolloProvider client={client}>
+          <UsersList />
+        </ApolloProvider>
       </ScrollView>
     </SafeAreaView>
   );
