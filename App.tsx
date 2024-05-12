@@ -16,6 +16,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import HOC from './src/components/HOC';
 
 import {
   Colors,
@@ -71,9 +72,25 @@ function App(): React.JSX.Element {
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <ApolloProvider client={client}>
-          <UsersList />
-        </ApolloProvider>
+        <View style={{backgroundColor: 'blue', margin: 10}}>
+          <HOC>
+            {dataarray => {
+              return (
+                <View>
+                  <View>
+                    <Text>text node 1</Text>
+                  </View>
+                  <View>
+                    <Text>text node 2</Text>
+                  </View>
+                  {dataarray.map(thisel => {
+                    return <Text>{thisel}</Text>;
+                  })}
+                </View>
+              );
+            }}
+          </HOC>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
