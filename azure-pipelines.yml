@@ -10,15 +10,17 @@ pool:
   vmImage: 'macos-latest'
 
 steps:
-- task: Npm@1
+- task: NodeTool@0
   inputs:
-    command: 'install'
+    versionSpec: '14.x'
+  displayName: 'Install Node.js'
 
-- task: Gradle@2
-  inputs:
-    workingDirectory: ''
-    gradleWrapperFile: 'gradlew'
-    gradleOptions: '-Xmx3072m'
-    publishJUnitResults: false
-    testResultsFiles: '**/TEST-*.xml'
-    tasks: 'assembleDebug'
+- script: |
+    npm install -g react-native-cli
+    npm install
+  displayName: 'Install NPM packages'
+
+- script: |
+    cd android
+    ./gradlew assembleRelease
+  displayName: 'Build Android APK'
