@@ -9,6 +9,10 @@ trigger:
 pool:
   vmImage: 'macos-latest'
 
+variables:
+  - group: AndroidBuild
+  - group: FirebaseDeploy
+
 steps:
   - task: JavaToolInstaller@0
     inputs:
@@ -50,11 +54,12 @@ steps:
       ./gradlew assembleRelease
     displayName: 'Build Android APK'
 
-  - task: FirebaseAppDistributionUpload@1
-    displayName: 'Deploy to Firebase Distribution'
+  - task: CmdLine@2
     inputs:
-      serviceConnection: 'Firebase Service connection' # Your Firebase service connection
-      app: 'batch5-bfcf2' # Firebase App ID
-      groups: 'dev' # Firebase Distribution Groups
-      releaseNotes: 'Automated release from Azure Pipelines'
-      apkPath: '$(Build.SourcesDirectory)/android/app/build/outputs/apk/release/app-release.apk' # Path to the built APK
+      script: 'npm install -g firebase-tools'
+      workingDirectory: '$(Agent.ToolsDirectory)'
+    displayName: 'Install firebase cli'
+
+  - task: CmdLine@2
+    inputs:
+      script: 'firebase appdistribution:distribute $(Build.SourcesDirectory)/android/app/build/outputs/apk/release/app-release.apk --token $(TOKEN) --app $(APP_ID) --release-notes "Upload from azure"'
