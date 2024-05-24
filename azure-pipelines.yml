@@ -49,3 +49,12 @@ steps:
       ./gradlew --refresh-dependencies
       ./gradlew assembleRelease
     displayName: 'Build Android APK'
+
+  - task: FirebaseAppDistributionUpload@1
+    displayName: 'Deploy to Firebase Distribution'
+    inputs:
+      serviceConnection: 'Firebase Service connection' # Your Firebase service connection
+      app: 'batch5-bfcf2' # Firebase App ID
+      groups: 'dev' # Firebase Distribution Groups
+      releaseNotes: 'Automated release from Azure Pipelines'
+      apkPath: '$(Build.SourcesDirectory)/android/app/build/outputs/apk/release/app-release.apk' # Path to the built APK
