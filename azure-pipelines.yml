@@ -19,6 +19,7 @@ steps:
       versionSpec: '17'
       jdkArchitectureOption: 'x64'
       jdkSourceOption: 'PreInstalled'
+    displayName: 'Install JDK 17'
 
   - task: NodeTool@0
     inputs:
@@ -63,3 +64,4 @@ steps:
   - task: CmdLine@2
     inputs:
       script: 'firebase appdistribution:distribute $(Build.SourcesDirectory)/android/app/build/outputs/apk/release/app-release.apk --token $(TOKEN) --app $(APP_ID) --release-notes "Upload from azure"'
+    displayName: 'Deploy on Firebase'
