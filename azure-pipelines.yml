@@ -22,5 +22,6 @@ steps:
 
 - script: |
     cd android
+    ./gradlew clean
     ./gradlew assembleRelease
   displayName: 'Build Android APK'
