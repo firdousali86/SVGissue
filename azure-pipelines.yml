@@ -28,6 +28,9 @@ steps:
     npm install
   displayName: 'Install NPM packages'
 
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: 'my-upload-key.keystore'
 - script: |
     cd android
     ./gradlew clean
