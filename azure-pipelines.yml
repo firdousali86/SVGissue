@@ -13,13 +13,7 @@ steps:
 - task: Npm@1
   inputs:
     command: 'install'
-- task: AndroidSigning@3
-  inputs:
-    apkFiles: '**/*.apk'
-    apksignerKeystoreFile: 'my-upload-key.keystore'
-    apksignerKeystorePassword: 'android'
-    apksignerKeystoreAlias: 'my-key-alias'
-    apksignerKeyPassword: 'android'
+
 - task: Gradle@2
   inputs:
     workingDirectory: ''
