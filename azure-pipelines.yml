@@ -39,9 +39,9 @@ steps:
 
   - script: |
       echo "MYAPP_UPLOAD_STORE_FILE=$(releaseKeystore.secureFilePath)" >> $HOME/.gradle/gradle.properties
-      echo "MYAPP_UPLOAD_KEY_ALIAS=my-key-alias" >> $HOME/.gradle/gradle.properties
-      echo "MYAPP_UPLOAD_STORE_PASSWORD=android" >> $HOME/.gradle/gradle.properties
-      echo "MYAPP_UPLOAD_KEY_PASSWORD=android" >> $HOME/.gradle/gradle.properties
+      echo "MYAPP_UPLOAD_KEY_ALIAS=$(MYAPP_UPLOAD_KEY_ALIAS)" >> $HOME/.gradle/gradle.properties
+      echo "MYAPP_UPLOAD_STORE_PASSWORD=$(MYAPP_UPLOAD_STORE_PASSWORD)" >> $HOME/.gradle/gradle.properties
+      echo "MYAPP_UPLOAD_KEY_PASSWORD=$(MYAPP_UPLOAD_KEY_PASSWORD)" >> $HOME/.gradle/gradle.properties
     displayName: 'Update gradle.properties with keystore file path'
 
   - script: |
@@ -63,5 +63,5 @@ steps:
 
   - task: CmdLine@2
     inputs:
-      script: 'firebase appdistribution:distribute $(Build.SourcesDirectory)/android/app/build/outputs/apk/release/app-release.apk --token $(TOKEN) --app $(APP_ID) --release-notes "Upload from azure"'
+      script: 'firebase appdistribution:distribute $(Build.SourcesDirectory)/android/app/build/outputs/apk/release/app-release.apk --token $(TOKEN) --app $(APP_ID) --groups dev --release-notes "Upload from azure"'
     displayName: 'Deploy on Firebase'
