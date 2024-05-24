@@ -12,12 +12,10 @@ pool:
 steps:
 - task: JavaToolInstaller@0
   inputs:
-    versionSpec: '8'
+    versionSpec: '11'
     jdkArchitectureOption: 'x64'
     jdkSourceOption: 'PreInstalled'
-- script: |
-    echo "org.gradle.java.home=/usr/lib/jvm/java-8-openjdk-amd64" >> gradle.properties
-  displayName: 'Set Gradle Java Home'
+
 
 
 - task: NodeTool@0
