@@ -32,6 +32,10 @@ steps:
   inputs:
     secureFile: 'my-upload-key.keystore'
 - script: |
+    echo "MYAPP_UPLOAD_STORE_FILE=$(Agent.TempDirectory)/my-upload-key.keystore" >> gradle.properties
+  displayName: 'Update gradle.properties with keystore file path'
+
+- script: |
     cd android
     ./gradlew clean
     ./gradlew --refresh-dependencies
