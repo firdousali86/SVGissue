@@ -32,7 +32,7 @@ steps:
   inputs:
     secureFile: 'my-upload-key.keystore'
 - script: |
-    echo "MYAPP_UPLOAD_STORE_FILE=$(Agent.TempDirectory)/my-upload-key.keystore" >> gradle.properties
+    echo "MYAPP_UPLOAD_STORE_FILE=$(SECUREFILE_my-upload-key_PATH)" >> gradle.properties
   displayName: 'Update gradle.properties with keystore file path'
 
 - script: |
