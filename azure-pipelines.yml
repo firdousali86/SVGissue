@@ -4,43 +4,45 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/android
 
 trigger:
-- main
+  - main
 
 pool:
   vmImage: 'macos-latest'
 
 steps:
-- task: JavaToolInstaller@0
-  inputs:
-    versionSpec: '17'
-    jdkArchitectureOption: 'x64'
-    jdkSourceOption: 'PreInstalled'
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '17'
+      jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'PreInstalled'
 
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '18.x'
+    displayName: 'Install Node.js'
 
+  - script: |
+      npm install -g react-native-cli
+      npm install
+    displayName: 'Install NPM packages'
 
-- task: NodeTool@0
-  inputs:
-    versionSpec: '18.x'
-  displayName: 'Install Node.js'
+  - task: DownloadSecureFile@1
+    name: releaseKeystore
+    displayName: 'Download Release Keystore file'
+    inputs:
+      secureFile: 'my-upload-key.keystore'
 
-- script: |
-    npm install -g react-native-cli
-    npm install
-  displayName: 'Install NPM packages'
+  - script: |
+      echo "MYAPP_UPLOAD_STORE_FILE=$(releaseKeystore.secureFilePath)" >> gradle.properties
+    displayName: 'Update gradle.properties with keystore file path'
 
-- task: DownloadSecureFile@1
-  name: releaseKeystore
-  displayName: 'Download Release Keystore file'
-  inputs:
-    secureFile: 'my-upload-key.keystore'
+  - script: |
+      echo "android.signingConfigs.release.storeFile = file(\"$(releaseKeystore.secureFilePath)\")" >> android/app/build.gradle
+    displayName: 'Update build.gradle with keystore file path'
 
-- script: |
-    echo "MYAPP_UPLOAD_STORE_FILE=$(releaseKeystore.secureFilePath)" >> gradle.properties
-  displayName: 'Update gradle.properties with keystore file path'
-
-- script: |
-    cd android
-    ./gradlew clean
-    ./gradlew --refresh-dependencies
-    ./gradlew assembleRelease
-  displayName: 'Build Android APK'
+  - script: |
+      cd android
+      ./gradlew clean
+      ./gradlew --refresh-dependencies
+      ./gradlew assembleRelease
+    displayName: 'Build Android APK'
