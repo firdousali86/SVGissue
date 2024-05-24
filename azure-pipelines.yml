@@ -29,5 +29,6 @@ steps:
 - script: |
     cd android
     ./gradlew clean
+    ./gradlew --refresh-dependencies
     ./gradlew assembleRelease
   displayName: 'Build Android APK'
