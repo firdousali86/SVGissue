@@ -33,7 +33,10 @@ steps:
       secureFile: 'my-upload-key.keystore'
 
   - script: |
-      echo "MYAPP_UPLOAD_STORE_FILE=$(releaseKeystore.secureFilePath)" >> gradle.properties
+      echo "MYAPP_UPLOAD_STORE_FILE=$(releaseKeystore.secureFilePath)" >> $HOME/.gradle/gradle.properties
+      echo "MYAPP_UPLOAD_KEY_ALIAS=my-key-alias" >> $HOME/.gradle/gradle.properties
+      echo "MYAPP_UPLOAD_STORE_PASSWORD=android" >> $HOME/.gradle/gradle.properties
+      echo "MYAPP_UPLOAD_KEY_PASSWORD=android" >> $HOME/.gradle/gradle.properties
     displayName: 'Update gradle.properties with keystore file path'
 
   - script: |
