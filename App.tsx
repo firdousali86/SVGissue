@@ -17,6 +17,8 @@ import {
   View,
 } from 'react-native';
 import HOC from './src/components/HOC';
+import GSheet from './src/components/GSheet';
+import GSheet2 from './src/components/GSheet2';
 
 import {
   Colors,
@@ -91,6 +93,7 @@ function App(): React.JSX.Element {
             }}
           </HOC>
         </View>
+        <GSheet />
       </ScrollView>
     </SafeAreaView>
   );
